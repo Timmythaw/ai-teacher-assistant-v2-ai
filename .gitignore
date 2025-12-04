@@ -205,3 +205,13 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Google Credentials
+credentials.json
+token.json
+vertex-key.json
+
+# Python/uv
+.venv/
+__pycache__/
+*.pyc

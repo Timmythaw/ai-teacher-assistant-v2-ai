@@ -1,0 +1,12 @@
+[project]
+name = "ai-teacher-assistant-v2-ai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "google-api-python-client>=2.187.0",
+    "google-auth-httplib2>=0.2.1",
+    "google-auth-oauthlib>=1.2.3",
+    "google-cloud-aiplatform>=1.129.0",
+]
