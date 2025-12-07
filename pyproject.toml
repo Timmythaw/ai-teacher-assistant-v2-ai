@@ -1,12 +1,206 @@
 [project]
 name = "ai-teacher-assistant-v2-ai"
 version = "0.1.0"
-description = "Add your description here"
+description = "AI Teacher Assistant with multi-agent architecture using Google ADK and Vertex AI"
 readme = "README.md"
 requires-python = ">=3.12"
+authors = [
+    {name = "Timmy", email = "timmythaw17@gmail.com"}
+]
+keywords = ["ai", "education", "agents", "vertex-ai", "adk"]
+
 dependencies = [
+    # Google Cloud & Vertex AI
+    "google-cloud-aiplatform>=1.129.0",
     "google-api-python-client>=2.187.0",
     "google-auth-httplib2>=0.2.1",
     "google-auth-oauthlib>=1.2.3",
-    "google-cloud-aiplatform>=1.129.0",
+
+    # Google ADK (Agent Development Kit)
+    "google-adk>=0.1.0",
+
+    # Pydantic for schemas and validation
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+
+    # Environment management
+    "python-dotenv>=1.0.0",
+
+    # Structured logging
+    "structlog>=24.1.0",
+
+    # OpenTelemetry for observability
+    "opentelemetry-api>=1.22.0",
+    "opentelemetry-sdk>=1.22.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Code formatting
+    "black>=24.1.0",
+    "isort>=5.13.0",
+
+    # Linting
+    "ruff>=0.2.0",
+
+    # Type checking
+    "mypy>=1.8.0",
+    "types-requests>=2.31.0",
+
+    # Testing
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+
+    # Pre-commit hooks
+    "pre-commit>=3.6.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# ============================================================================
+# HATCH - Build Configuration
+# ============================================================================
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+only-include = ["main.py", "test.py"]
+
+# ============================================================================
+# BLACK - Code Formatter
+# ============================================================================
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.ruff_cache
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# ============================================================================
+# RUFF - Fast Python Linter (replaces flake8, isort, etc.)
+# ============================================================================
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+fix = true
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "N",      # pep8-naming
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "SIM",    # flake8-simplify
+    "TCH",    # flake8-type-checking
+    "PTH",    # flake8-use-pathlib
+    "RUF",    # Ruff-specific rules
+]
+ignore = [
+    "E501",   # Line too long (handled by black)
+    "B008",   # Do not perform function calls in argument defaults
+    "B905",   # zip() without an explicit strict= parameter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Unused imports in __init__.py
+"tests/**/*.py" = ["S101"]  # Use of assert in tests
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+force-sort-within-sections = true
+
+# ============================================================================
+# MYPY - Static Type Checker
+# ============================================================================
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = false
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+pretty = true
+exclude = [
+    "test\\.py$",
+    "main\\.py$",
+]
+
+# Per-module options
+[[tool.mypy.overrides]]
+module = [
+    "google.*",
+    "google_auth_oauthlib.*",
+    "googleapiclient.*",
+    "pydantic_settings",
+    "vertexai.*",
+    "structlog.*",
+]
+ignore_missing_imports = true
+
+# ============================================================================
+# PYTEST - Testing Framework
+# ============================================================================
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow tests",
+]
+
+# ============================================================================
+# COVERAGE - Code Coverage
+# ============================================================================
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/__init__.py",
+    "*/config/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
 ]
