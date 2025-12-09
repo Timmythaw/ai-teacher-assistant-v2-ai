@@ -66,11 +66,13 @@ class Settings(BaseSettings):
         description="Model ID for specialist agents (Gemini Flash recommended)",
     )
 
-    # Data Layer
-    vertex_ai_search_datastore_id: str | None = Field(
-        default=None,
-        description="Vertex AI Search datastore ID for curriculum documents",
+    # NEW - Vertex AI Search (RAG)
+    vertex_ai_search_datastore_id: str = Field(
+        ...,
+        description="Full datastore ID for Vertex AI Search (RAG)",
+        min_length=10,
     )
+
     bigquery_dataset_id: str | None = Field(
         default=None,
         description="BigQuery dataset ID for student records",

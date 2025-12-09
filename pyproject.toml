@@ -12,6 +12,7 @@ keywords = ["ai", "education", "agents", "vertex-ai", "adk"]
 dependencies = [
     # Google Cloud & Vertex AI
     "google-cloud-aiplatform>=1.129.0",
+    "google-cloud-discoveryengine>=0.11.0",
     "google-api-python-client>=2.187.0",
     "google-auth-httplib2>=0.2.1",
     "google-auth-oauthlib>=1.2.3",
