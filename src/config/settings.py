@@ -58,11 +58,11 @@ class Settings(BaseSettings):
 
     # Model Configuration
     orchestrator_model: str = Field(
-        default="gemini-2.0-flash-exp",
+        default="gemini-2.5-flash",  # gemini-3.0-pro
         description="Model ID for orchestrator agent (Gemini Pro recommended)",
     )
     specialist_model: str = Field(
-        default="gemini-2.0-flash-exp",
+        default="gemini-2.5-flash",
         description="Model ID for specialist agents (Gemini Flash recommended)",
     )
 
